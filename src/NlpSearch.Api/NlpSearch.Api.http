@@ -1,0 +1,9 @@
+@NlpSearch.Api_HostAddress = http://localhost:5284
+
+POST {{NlpSearch.Api_HostAddress}}/api/search/parse
+Content-Type: application/json
+
+{
+  "query": "status:open AND (title:\"release notes\" OR created>=2026-01-01)"
+}
+###
