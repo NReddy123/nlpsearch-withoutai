@@ -20,4 +20,8 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\NlpSearch.Api\NlpSearch.Api.csproj" />
+  </ItemGroup>
+
 </Project>
