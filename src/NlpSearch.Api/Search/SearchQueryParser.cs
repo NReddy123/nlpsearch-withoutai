@@ -83,12 +83,14 @@ public sealed class SearchQueryParser
 
         private QueryNode ParseUnary()
         {
-            if (!Match(TokenKind.Not))
+            if (Current.Kind != TokenKind.Not)
             {
                 return ParsePrimary();
             }
 
-            EnterNesting(Current.Offset);
+            var notToken = Current;
+            Advance();
+            EnterNesting(notToken.Offset);
             try
             {
                 return new NotNode(ParseUnary());

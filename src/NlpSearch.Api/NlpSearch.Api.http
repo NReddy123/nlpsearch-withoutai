@@ -1,6 +1,9 @@
 @NlpSearch.Api_HostAddress = http://localhost:5284
 
-GET {{NlpSearch.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+POST {{NlpSearch.Api_HostAddress}}/api/search/parse
+Content-Type: application/json
 
+{
+  "query": "status:open AND (title:\"release notes\" OR created>=2026-01-01)"
+}
 ###
