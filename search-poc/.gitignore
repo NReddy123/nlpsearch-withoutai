@@ -1,0 +1,26 @@
+# Node dependencies
+node_modules/
+
+# Vite and Angular build output/cache
+dist/
+out-tsc/
+.angular/
+.vite/
+
+# Test and coverage output
+coverage/
+test-results/
+playwright-report/
+TestResults/
+
+# TypeScript incremental build metadata
+*.tsbuildinfo
+
+# .NET build output (also ignored by the repository-root .gitignore)
+**/bin/
+**/obj/
+
+# Package-manager logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*

@@ -1,0 +1,49 @@
+<main class="shell">
+  <header>
+    <p class="eyebrow">SEARCH POC</p>
+    <h1>Search sample records</h1>
+    <p class="intro">The browser validates for fast feedback; the API reparses and validates the original query before searching.</p>
+  </header>
+
+  <section class="panel" aria-labelledby="query-heading">
+    <label id="query-heading" for="query">Search expression</label>
+    <textarea id="query" rows="3" spellcheck="false" [value]="query" (input)="onQueryInput($event)"></textarea>
+    <p class="hint">Examples: <code>customer = "Acme"</code>, <code>status IN ("Open","Pending")</code>, <code>amount RANGE (1000,5000)</code>.</p>
+
+    <div class="error-block" *ngIf="validationError as error" role="alert">
+      <strong>{{ error.code }}</strong>: {{ error.message }}
+      <div class="highlight" aria-label="Error location"><span>{{ query.slice(0, error.start) }}</span><mark>{{ query.slice(error.start, error.start + error.length) || " " }}</mark><span>{{ query.slice(error.start + error.length) }}</span></div>
+      <small>Zero-based UTF-16 position {{ error.start }}, length {{ error.length }}</small>
+    </div>
+
+    <div class="actions">
+      <button type="button" [disabled]="!!validationError || loading" (click)="runSearch()">
+        {{ loading ? "Searching…" : "Search" }}
+      </button>
+      <span class="valid" *ngIf="preview && !validationError">Valid query</span>
+    </div>
+  </section>
+
+  <section class="panel" *ngIf="preview as queryPreview">
+    <h2>Validated condition preview</h2>
+    <pre>{{ queryPreview | json }}</pre>
+  </section>
+
+  <section class="panel" *ngIf="requestError as message" role="alert">
+    <h2>Search request failed</h2>
+    <p class="error-text">{{ message }}</p>
+  </section>
+
+  <section class="panel" *ngIf="response as result">
+    <h2>Results <span class="count">{{ result.results.length }}</span></h2>
+    <p *ngIf="!result.results.length">No records matched.</p>
+    <ul class="results">
+      <li *ngFor="let item of result.results">
+        <strong>{{ item.customer ?? "(missing customer)" }}</strong>
+        <span>{{ item.status ?? "(missing status)" }}</span>
+        <span>Amount: {{ item.amount ?? "—" }}</span>
+        <span>Date: {{ item.createdDate ?? "—" }}</span>
+      </li>
+    </ul>
+  </section>
+</main>

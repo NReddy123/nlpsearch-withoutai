@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "fields": [
+    {
+      "name": "customer",
+      "aliases": ["client"],
+      "type": "string",
+      "operators": ["=", "IN"]
+    },
+    {
+      "name": "status",
+      "aliases": [],
+      "type": "string",
+      "operators": ["=", "IN"],
+      "allowedValues": ["Open", "Pending", "Closed"]
+    },
+    {
+      "name": "amount",
+      "aliases": [],
+      "type": "number",
+      "operators": ["=", "!=", "<", "<=", ">", ">=", "IN", "RANGE"]
+    },
+    {
+      "name": "createdDate",
+      "aliases": ["created"],
+      "type": "date",
+      "operators": ["=", "!=", "<", "<=", ">", ">=", "IN", "RANGE"]
+    }
+  ]
+}

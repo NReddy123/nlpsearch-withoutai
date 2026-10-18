@@ -1,0 +1,68 @@
+{
+  "languageVersion": 1,
+  "valid": [
+    {
+      "name": "quoted string comparison",
+      "query": "customer = \"Acme\"",
+      "expected": [
+        { "kind": "comparison", "field": "customer", "type": "string", "operator": "=", "values": ["Acme"] }
+      ]
+    },
+    {
+      "name": "field alias and string IN",
+      "query": "status IN (\"Open\", \"Pending\")",
+      "expected": [
+        { "kind": "in", "field": "status", "type": "string", "operator": "IN", "values": ["Open", "Pending"] }
+      ]
+    },
+    {
+      "name": "signed decimal comparison",
+      "query": "amount > -12.50",
+      "expected": [
+        { "kind": "comparison", "field": "amount", "type": "number", "operator": ">", "values": ["-12.50"] }
+      ]
+    },
+    {
+      "name": "inclusive numeric range with equal bounds allowed",
+      "query": "amount RANGE (1000, 1000)",
+      "expected": [
+        { "kind": "range", "field": "amount", "type": "number", "operator": "RANGE", "values": ["1000", "1000"] }
+      ]
+    },
+    {
+      "name": "calendar date range",
+      "query": "createdDate RANGE (2026-10-01, 2026-10-14)",
+      "expected": [
+        { "kind": "range", "field": "createdDate", "type": "date", "operator": "RANGE", "values": ["2026-10-01", "2026-10-14"] }
+      ]
+    },
+    {
+      "name": "multiple explicit conjunctions",
+      "query": "status = \"Open\" AND amount < 5000",
+      "expected": [
+        { "kind": "comparison", "field": "status", "type": "string", "operator": "=", "values": ["Open"] },
+        { "kind": "comparison", "field": "amount", "type": "number", "operator": "<", "values": ["5000"] }
+      ]
+    },
+    {
+      "name": "escaped quote and backslash",
+      "query": "customer = \"A \\\"quoted\\\" \\\\ name\"",
+      "expected": [
+        { "kind": "comparison", "field": "customer", "type": "string", "operator": "=", "values": ["A \"quoted\" \\ name"] }
+      ]
+    }
+  ],
+  "invalid": [
+    { "name": "unknown field", "query": "unknown = \"x\"", "code": "unknown_field", "start": 0, "length": 7 },
+    { "name": "unsupported string operator", "query": "customer > \"x\"", "code": "unsupported_operator", "start": 9, "length": 1 },
+    { "name": "invalid enum value", "query": "status = \"open\"", "code": "invalid_value", "start": 9, "length": 6 },
+    { "name": "empty IN list", "query": "status IN ()", "code": "invalid_syntax", "start": 11, "length": 1 },
+    { "name": "reversed range", "query": "amount RANGE (9, 2)", "code": "invalid_range", "start": 17, "length": 1 },
+    { "name": "invalid calendar date", "query": "createdDate = 2026-02-30", "code": "invalid_value", "start": 14, "length": 10 },
+    { "name": "mixed types are rejected", "query": "amount IN (1, \"2\")", "code": "invalid_value", "start": 14, "length": 3 },
+    { "name": "scientific notation is rejected", "query": "amount = 1e3", "code": "invalid_value", "start": 9, "length": 3 },
+    { "name": "decimal overflow is rejected", "query": "amount = 79228162514264337593543950336", "code": "invalid_value", "start": 9, "length": 29 },
+    { "name": "OR is out of scope", "query": "amount = 1 OR amount = 2", "code": "invalid_syntax", "start": 11, "length": 2 },
+    { "name": "trailing input is not ignored", "query": "amount = 1 junk", "code": "invalid_syntax", "start": 11, "length": 4 }
+  ]
+}
